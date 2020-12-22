@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SoLIvros.Abstraction\SoLivros.Abstraction.csproj" />
+    <ProjectReference Include="..\SoLivros.CrossCutting\SoLivros.CrossCutting.csproj" />
+    <ProjectReference Include="..\SoLivros.DataAccess.EF\SoLivros.DataAccess.EF.csproj" />
+  </ItemGroup>
+
+</Project>
