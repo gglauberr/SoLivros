@@ -16,14 +16,14 @@ namespace SoLivros.API.Controllers
             this.favoritoService = favoritoService ?? throw new ArgumentNullException(nameof(favoritoService));
         }
 
-        [HttpGet("{pedidoId}")]
+        [HttpGet("{livroId}")]
         [ProducesDefaultResponseType(typeof(BaseResponse<string>))]
-        public async Task<IActionResult> FavoritarLivro(int pedidoId)
+        public async Task<IActionResult> FavoritarLivro(int livroId)
         {
             var response = new BaseResponse<string>();
             try
             {
-                response.Success = await favoritoService.FavoritarLivro(User, pedidoId);
+                response.Success = await favoritoService.FavoritarLivro(User, livroId);
                 response.Message = response.Success
                                    ? "Livro favoritado com sucesso."
                                    : "Erro ao favoritar livro";
@@ -35,14 +35,14 @@ namespace SoLivros.API.Controllers
             return Result(response);
         }
 
-        [HttpGet("{pedidoId}")]
+        [HttpGet("{livroId}")]
         [ProducesDefaultResponseType(typeof(BaseResponse<string>))]
-        public async Task<IActionResult> DesfavoritarLivro(int pedidoId)
+        public async Task<IActionResult> DesfavoritarLivro(int livroId)
         {
             var response = new BaseResponse<string>();
             try
             {
-                response.Success = await favoritoService.DesfavoritarLivro(User, pedidoId);
+                response.Success = await favoritoService.DesfavoritarLivro(User, livroId);
                 response.Message = response.Success
                                    ? "Livro desfavoritado com sucesso."
                                    : "Erro ao desfavoritar livro";
@@ -56,9 +56,8 @@ namespace SoLivros.API.Controllers
 
         [HttpGet]
         [ProducesDefaultResponseType(typeof(ListarLivrosResponse))]
-        public async Task<IActionResult> ListarLivrosFavoritados()
+        public async Task<IActionResult> ListarLivrosFavoritados(string filtro)
         {
-            var filtro = Request.Query["filtro"].ToString();
             var response = new ListarLivrosResponse();
             try
             {

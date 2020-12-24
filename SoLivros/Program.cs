@@ -30,6 +30,7 @@ namespace SoLivros.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("https://*:5001", "https://localhost:5001", "http://*:5000", "http://localhost:5000");
                     webBuilder.UseStartup<Startup>();
                 });
     }

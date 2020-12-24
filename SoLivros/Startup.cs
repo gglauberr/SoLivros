@@ -14,6 +14,7 @@ using System.Text;
 
 namespace SoLivros.API
 {
+    using Microsoft.AspNetCore.Http;
     using SoLivros.DataAccess.EF;
     using SoLivros.Domain.Models;
     using SoLivros.Ioc;
@@ -69,14 +70,27 @@ namespace SoLivros.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SoLivros", Version = "v1" });
-                c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Autenticação baseada em Json Web Token (JWT)",
+                    Description = "Insira bearer antes do token",
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey
+                    
                 });
-                
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }});
+
             });
 
             services.AddDbContext<SoLivrosContext>(options => options
@@ -86,6 +100,12 @@ namespace SoLivros.API
             services.BusinessRegister(Configuration);
 
             services.AddCors();
+
+            services.AddHttpsRedirection((options) =>
+            {
+                options.HttpsPort = 5001;
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,6 +116,10 @@ namespace SoLivros.API
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SoLivros v1"));
+            }
+            else
+            {
+                app.UseHttpsRedirection();
             }
 
             app.UseAuthentication();

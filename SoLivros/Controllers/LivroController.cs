@@ -18,9 +18,8 @@ namespace SoLivros.API.Controllers
 
         [HttpGet]
         [ProducesDefaultResponseType(typeof(ListarLivrosResponse))]
-        public async Task<IActionResult> ListarLivros()
+        public async Task<IActionResult> ListarLivros(string filtro)
         {
-            var filtro = Request.Query["filtro"].ToString();
             var response = new ListarLivrosResponse();
             try
             {

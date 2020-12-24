@@ -84,10 +84,12 @@ namespace SoLivros.BusinessLogic
             {
                 var email = user.GetEmail();
 
-                if(string.IsNullOrWhiteSpace(filtro))
-                {
-                    return await context.Favoritos
-                        .Where((f) => f.Email.Equals(email))
+                return await context.Favoritos
+                        .Where((f)
+                             => !string.IsNullOrWhiteSpace(filtro)
+                                 ? f.Livro.Nome.Contains(filtro)
+                                 : true
+                             && f.Email.Equals(email))
                         .Select((f) => new ListarLivrosDTO()
                         {
                             Id = f.Livro.Id,
@@ -96,22 +98,6 @@ namespace SoLivros.BusinessLogic
                             Imagem = f.Livro.Imagem
                         })
                         .ToListAsync();
-                }
-                else
-                {
-                    return await context.Favoritos
-                        .Where((f) 
-                            => f.Email.Equals(email)
-                            && f.Livro.Nome.Contains(filtro))
-                        .Select((f) => new ListarLivrosDTO()
-                        {
-                            Id = f.Livro.Id,
-                            Nome = f.Livro.Nome,
-                            Autor = f.Livro.Autor,
-                            Imagem = f.Livro.Imagem
-                        })
-                        .ToListAsync();
-                }
             }
             catch(Exception ex)
             {

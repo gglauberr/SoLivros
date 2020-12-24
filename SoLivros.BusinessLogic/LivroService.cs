@@ -23,32 +23,19 @@ namespace SoLivros.BusinessLogic
         {
             try
             {
-                if(string.IsNullOrWhiteSpace(filtro))
-                {
-                    return await context.Livros
-                        .Select((l) => new ListarLivrosDTO()
-                        {
-                            Id = l.Id,
-                            Nome = l.Nome,
-                            Autor = l.Autor,
-                            Imagem = l.Imagem
-                        })
-                        .ToListAsync();
-                }
-                else
-                {
-                    return await context.Livros
-                        .Where((l) => l.Nome.Contains(filtro))
-                        .Select((l) => new ListarLivrosDTO()
-                        {
-                            Id = l.Id,
-                            Nome = l.Nome,
-                            Autor = l.Autor,
-                            Imagem = l.Imagem
-                        })
-                        .ToListAsync();
-                }
-                
+                return await context.Livros
+                         .Where((l)
+                             => !string.IsNullOrWhiteSpace(filtro)
+                                 ? l.Nome.Contains(filtro)
+                                 : true)
+                         .Select((l) => new ListarLivrosDTO()
+                         {
+                             Id = l.Id,
+                             Nome = l.Nome,
+                             Autor = l.Autor,
+                             Imagem = l.Imagem
+                         })
+                         .ToListAsync();
             }
             catch(Exception ex)
             {
